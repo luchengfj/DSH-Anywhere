@@ -1,0 +1,15 @@
+# Context-side ignore for: docker build -f install/Dockerfile .
+# Paths are relative to the BUILD CONTEXT ROOT (the repo root), not install/.
+# Keep the context tiny: the Dockerfile COPYs only the dirs it needs.
+.git
+.gitignore
+node_modules
+npm-debug.log*
+test
+install
+README.md
+SPEC.md
+.dsh-anywhere
+*.log
+.DS_Store
+Thumbs.db

@@ -1,0 +1,20 @@
+# Local build / pack tooling (contains third-party binaries and extracted DSH internals)
+_build/
+_qrprobe_tmp/
+
+# Generated installers (published as GitHub Release assets instead)
+dist/
+
+# Runtime state / secrets
+state/
+*.log
+secret
+host-id
+pair-code.txt
+meta.json
+events.ndjson
+command-inbox.jsonl
+before-*.bak
+node_modules/
+.DS_Store
+Thumbs.db

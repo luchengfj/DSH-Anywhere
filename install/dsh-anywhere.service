@@ -1,0 +1,28 @@
+[Unit]
+# DSH Anywhere relay - systemd USER unit (install to ~/.config/systemd/user/).
+# Installed by install/install.sh (default / --relay-only). No root/sudo needed.
+# Docs: ../../README.md  |  per-platform notes: ../install/README.md
+Description=DSH Anywhere relay (REST + SSE + hosted phone PWA)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+# The installer generates %h/.dsh-anywhere/relay-start.sh, which already
+# cd's into the checkout and applies PORT / HOST / DSH_ANYWHERE_HOME defaults.
+# By exec'ing that script the unit does not need to know where the source lives.
+# With --home <dir> the installer rewrites %h/.dsh-anywhere to that dir below.
+Environment=DSH_ANYWHERE_HOME=%h/.dsh-anywhere
+ExecStart=/bin/sh %h/.dsh-anywhere/relay-start.sh
+Restart=on-failure
+RestartSec=3
+# The relay only reads the checkout (source + phone/ static files) and writes
+# its own state dir. Keep the rest of $HOME read-only as a safe default.
+WorkingDirectory=%h
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectHome=read-only
+ReadWritePaths=%h/.dsh-anywhere
+
+[Install]
+WantedBy=default.target

@@ -1,0 +1,13 @@
+# @local/dsh-anywhere-inject — DSH Anywhere 手机端命令注入桥
+#
+# 顶层必须是 YAML 数组；单条无 id 的 insert 会追加到根 entry 列表
+# (app-boot applyPatches:505-534)。entry 自带 id/name/config。
+# bare 包名不会被 anchorInsertedPluginNames 转成 file:// URL。
+
+- insert:
+    - id: dsh-anywhere-inject
+      name: '@local/dsh-anywhere-inject'
+      config:
+        host: 127.0.0.1
+        port: 8788
+        fallbackPorts: [8791, 8792, 8793]

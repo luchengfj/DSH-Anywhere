@@ -1,0 +1,20 @@
+{
+  "name": "@local/dsh-anywhere-inject",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "DSH Anywhere local injection bridge. Exposes a v1 newline-JSON-RPC endpoint on 127.0.0.1 that forwards phone commands into the live DSH agent session via sessionController.prompt(). No engines.dsh / peerDependencies so the DSH compatibility preflight never rejects the bundle.",
+  "license": "MIT",
+  "exports": {
+    ".": "./index.js",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "index.js",
+    "cordis.patch.yml",
+    "README.md"
+  ],
+  "dsh": {
+    "bundle": { "patch": "./cordis.patch.yml" }
+  }
+}

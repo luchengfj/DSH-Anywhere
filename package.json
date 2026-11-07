@@ -1,0 +1,21 @@
+{
+  "name": "dsh-anywhere",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Conversation sync + phone remote-control bridge for DeepSeek Harness (Windows / SteamDeck / phone)",
+  "engines": { "node": ">=22" },
+  "bin": { "dsh-anywhere": "./bin/cli.mjs" },
+  "repository": { "type": "git", "url": "git+https://github.com/luchengfj/DSH-Anywhere.git" },
+  "bugs": { "url": "https://github.com/luchengfj/DSH-Anywhere/issues" },
+  "homepage": "https://github.com/luchengfj/DSH-Anywhere#readme",
+  "license": "MIT",
+  "scripts": {
+    "start": "node bin/cli.mjs all",
+    "relay": "node relay/server.mjs",
+    "host": "node host/cli.mjs",
+    "test": "node test/integration.mjs",
+    "check": "node test/smoke.mjs",
+    "deploy-inject": "node install/deploy-inject.mjs"
+  }
+}

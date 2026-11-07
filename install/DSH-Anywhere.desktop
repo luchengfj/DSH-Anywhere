@@ -1,0 +1,12 @@
+[Desktop Entry]
+# 打包说明: @@ROOT@@ 是占位符, 由打包脚本在生成 Linux 包时替换为可移植的相对定位表达式
+# (基于桌面项 %k 取本文件所在目录, 解压到任意目录都可用), 并对本文件 chmod +x。
+# 注意: 请在本文件所在的包根目录就地双击运行 (%k 指向本文件), 或直接用 ./start.sh;
+# 若把本文件复制/软链到 ~/.local/share/applications 请改用绝对路径 Exec, 否则相对定位会失效。
+Type=Application
+Name=DSH Anywhere
+Comment=手机遥控桌面会话
+Exec=sh -c 'cd @@ROOT@@ && exec sh ./start.sh'
+Terminal=true
+Categories=Utility;Network;
+Icon=utilities-terminal

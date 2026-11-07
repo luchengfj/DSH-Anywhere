@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
+  <meta name="theme-color" content="#0b0e14">
+  <meta name="color-scheme" content="dark">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>DSH Anywhere</title>
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icon.svg">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- ===================== Pairing screen ===================== -->
+  <section id="pairing" class="screen">
+    <div class="pair-card">
+      <div class="brand">
+        <img class="brand-icon" src="icon.svg" alt="">
+        <div>
+          <h1>DSH Anywhere</h1>
+          <p class="muted">把桌面会话装进口袋</p>
+        </div>
+      </div>
+      <p class="hint">输入 Relay 地址与启动时打印的 6 位配对码，手机会保存令牌用于后续连接；或扫描电脑上的二维码自动配对。</p>
+      <form id="pair-form" autocomplete="off">
+        <label for="relay-url">Relay 地址</label>
+        <input id="relay-url" type="url" inputmode="url" placeholder="http://192.168.1.10:8787" spellcheck="false" required>
+        <label for="pair-code">6 位配对码</label>
+        <input id="pair-code" type="text" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" placeholder="••••••" spellcheck="false" autocomplete="one-time-code" required>
+        <button id="pair-submit" type="submit" class="primary">配对连接</button>
+      </form>
+      <p id="pair-error" class="error" role="alert" hidden></p>
+      <p class="muted tiny">令牌仅保存在本机 localStorage。请通过 LAN / Tailscale / HTTPS 访问。</p>
+    </div>
+  </section>
+
+  <!-- ===================== Main app ===================== -->
+  <section id="app" class="screen" hidden>
+    <header id="topbar">
+      <div class="topbar-row">
+        <div class="brand-mini">
+          <img src="icon.svg" alt="">
+          <span>DSH Anywhere</span>
+        </div>
+        <div class="top-actions">
+          <span id="conn" class="conn conn-offline" title="连接状态"><i class="dot"></i><span id="conn-label">离线</span></span>
+          <button id="btn-repair" class="icon-btn" type="button" title="重新配对 / 改地址" aria-label="重新配对">⚙</button>
+        </div>
+      </div>
+      <div class="switchers">
+        <label class="sel-wrap">
+          <span class="sel-label">主机</span>
+          <select id="host-select" aria-label="选择主机"></select>
+        </label>
+        <label class="sel-wrap grow">
+          <span class="sel-label">会话</span>
+          <select id="session-select" aria-label="选择会话"></select>
+        </label>
+      </div>
+      <div id="status-strip" class="status-strip" aria-live="polite"></div>
+    </header>
+
+    <main id="timeline" class="timeline" aria-label="会话时间线"></main>
+
+    <footer id="composer">
+      <div id="outbox-banner" class="outbox-banner" hidden></div>
+      <div class="kind-row" role="group" aria-label="消息类型">
+        <button class="kind active" data-kind="message" type="button">消息</button>
+        <button class="kind" data-kind="steer" type="button">转向</button>
+        <button class="kind" data-kind="interrupt" type="button">中断</button>
+        <button class="kind" data-kind="command" type="button">指令</button>
+      </div>
+      <form id="send-form" class="send-row">
+        <textarea id="composer-input" rows="1" placeholder="发送消息…" enterkeyhint="send"></textarea>
+        <button id="send-btn" class="send-btn" type="submit" title="发送" aria-label="发送">➤</button>
+      </form>
+      <div id="ack-strip" class="ack-strip" aria-live="polite"></div>
+    </footer>
+  </section>
+
+  <!--
+    Robust asset bootstrap.
+    The relay may serve the PWA at "/" or under "/app/*" (SPEC: GET / , /app/*).
+    We compute the directory of THIS document and load app.js as an ES module
+    relative to it, so no hardcoded absolute paths break a sub-path deploy.
+  -->
+  <script>
+    (function () {
+      try {
+        var here = new URL('.', document.baseURI);
+        var mod = document.createElement('script');
+        mod.type = 'module';
+        mod.src = new URL('app.js', here).href;
+        mod.onerror = function () {
+          var e = document.getElementById('pair-error');
+          if (e) { e.hidden = false; e.textContent = '无法加载 app.js，请检查静态文件是否正确托管。'; }
+        };
+        document.body.appendChild(mod);
+      } catch (err) {
+        document.addEventListener('DOMContentLoaded', function () {
+          var e = document.getElementById('pair-error');
+          if (e) { e.hidden = false; e.textContent = '初始化失败：' + err; }
+        });
+      }
+    })();
+  </script>
+</body>
+</html>

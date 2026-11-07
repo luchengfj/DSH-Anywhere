@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="DSH Anywhere">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#16203a"/>
+      <stop offset="1" stop-color="#0b0e14"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#5b9dff"/>
+      <stop offset="1" stop-color="#7c6bff"/>
+    </linearGradient>
+  </defs>
+  <!-- full-bleed background (maskable-safe) -->
+  <rect width="512" height="512" rx="112" fill="url(#bg)"/>
+  <!-- phone frame, kept inside the central safe circle -->
+  <rect x="150" y="96" width="212" height="320" rx="38" fill="none" stroke="url(#accent)" stroke-width="16"/>
+  <rect x="150" y="96" width="212" height="320" rx="38" fill="#101728" opacity="0.55"/>
+  <!-- screen: two conversation bubbles + a prompt chevron -->
+  <rect x="178" y="150" width="120" height="34" rx="17" fill="#3b82f6" opacity="0.95"/>
+  <rect x="214" y="200" width="120" height="34" rx="17" fill="#22c58b" opacity="0.95"/>
+  <rect x="178" y="250" width="96" height="12" rx="6" fill="#4d5b76"/>
+  <rect x="178" y="272" width="130" height="12" rx="6" fill="#4d5b76"/>
+  <path d="M196 336 l22 20 l-22 20" fill="none" stroke="url(#accent)" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+  <line x1="232" y1="356" x2="296" y2="356" stroke="url(#accent)" stroke-width="14" stroke-linecap="round"/>
+  <!-- home indicator -->
+  <rect x="220" y="392" width="72" height="9" rx="4.5" fill="#3a4761"/>
+  <!-- sync / signal dots in corners -->
+  <circle cx="118" cy="150" r="14" fill="url(#accent)"/>
+  <circle cx="394" cy="150" r="14" fill="url(#accent)"/>
+  <circle cx="118" cy="362" r="14" fill="url(#accent)"/>
+  <circle cx="394" cy="362" r="14" fill="url(#accent)"/>
+</svg>

@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="dark">
+  <title>DSH Anywhere · 手机扫码配对</title>
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <style>
+    :root {
+      --bg: #0b0e14;
+      --card: #141925;
+      --card-2: #1b2130;
+      --line: #2a3244;
+      --text: #e8ecf4;
+      --muted: #93a0b8;
+      --accent: #5b8cff;
+      --accent-2: #7aa2ff;
+      --ok: #46c08a;
+      --err: #ff7a7a;
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      background: radial-gradient(1200px 700px at 50% -10%, #18233a 0%, var(--bg) 60%) fixed;
+      color: var(--text);
+      font-family: system-ui, -apple-system, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      -webkit-font-smoothing: antialiased;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 28px 16px calc(28px + env(safe-area-inset-bottom));
+    }
+    .card {
+      width: 100%;
+      max-width: 420px;
+      background: linear-gradient(180deg, var(--card-2), var(--card));
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 24px 20px 22px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, .45);
+    }
+    .brand { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+    .dot {
+      width: 12px; height: 12px; border-radius: 50%;
+      background: var(--accent); box-shadow: 0 0 14px var(--accent);
+      flex: 0 0 auto;
+    }
+    h1 { font-size: 17px; margin: 0; font-weight: 650; letter-spacing: .2px; }
+    .sub { margin: 0 0 18px; color: var(--muted); font-size: 13px; line-height: 1.6; }
+    .code-label {
+      font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 6px;
+    }
+    .code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: clamp(38px, 12vw, 54px);
+      font-weight: 700;
+      letter-spacing: .18em;
+      line-height: 1.1;
+      text-align: center;
+      padding: 14px 6px 16px;
+      margin-bottom: 18px;
+      border-radius: 14px;
+      background: rgba(91, 140, 255, .08);
+      border: 1px dashed rgba(122, 162, 255, .45);
+      color: var(--accent-2);
+      text-shadow: 0 0 22px rgba(91, 140, 255, .35);
+    }
+    label { display: block; font-size: 12px; color: var(--muted); margin: 0 0 6px; }
+    input {
+      width: 100%;
+      background: #0e131e;
+      color: var(--text);
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      padding: 12px 13px;
+      font-size: 13px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      outline: none;
+    }
+    input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(91, 140, 255, .18); }
+    .qr {
+      width: min(300px, 100%);
+      margin: 18px auto 18px;
+      padding: 12px;
+      background: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, .35);
+    }
+    .qr svg { width: 100%; height: auto; display: block; }
+    .qr-empty { color: var(--muted); font-size: 12px; text-align: center; padding: 28px 0; }
+    .row { display: flex; gap: 10px; }
+    .btn {
+      flex: 1 1 0;
+      cursor: pointer;
+      border: 1px solid var(--line);
+      background: #0f1522;
+      color: var(--text);
+      border-radius: 11px;
+      padding: 12px 8px;
+      font-size: 13px;
+      font-weight: 600;
+      transition: transform .08s ease, background .15s ease, border-color .15s ease;
+    }
+    .btn:hover { border-color: var(--accent); }
+    .btn:active { transform: translateY(1px); }
+    .btn.primary { background: var(--accent); border-color: var(--accent); color: #071022; }
+    .btn.primary:hover { background: var(--accent-2); border-color: var(--accent-2); }
+    .hint {
+      margin: 16px 0 0;
+      font-size: 12px;
+      line-height: 1.75;
+      color: var(--muted);
+    }
+    .hint b { color: var(--text); font-weight: 600; }
+    .msg { min-height: 16px; margin: 10px 0 0; font-size: 12px; text-align: center; color: var(--muted); }
+    .msg.ok { color: var(--ok); }
+    .msg.err { color: var(--err); }
+    footer { margin-top: 14px; font-size: 11px; color: #5f6b82; text-align: center; }
+    @media (max-width: 360px) {
+      .card { padding: 20px 14px; }
+      .row { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <main class="card">
+    <div class="brand">
+      <span class="dot" aria-hidden="true"></span>
+      <h1>DSH Anywhere · 手机扫码配对</h1>
+    </div>
+    <p class="sub">用手机相机或微信「扫一扫」下方二维码，打开后会自动完成配对，无需手输地址与配对码。</p>
+
+    <div class="code-label">本次配对码</div>
+    <div id="code" class="code">------</div>
+
+    <label for="url">手机链接（可编辑，二维码实时更新）</label>
+    <input id="url" type="url" inputmode="url" spellcheck="false" autocomplete="off" placeholder="手机打开的链接">
+
+    <div id="qr" class="qr" aria-label="配对二维码"></div>
+
+    <div class="row">
+      <button id="copy" class="btn primary" type="button">复制手机链接</button>
+      <button id="open" class="btn" type="button">在浏览器打开</button>
+    </div>
+
+    <p class="hint">
+      用手机相机 / 微信「扫一扫」打开链接后即<b>自动完成配对</b>；若扫码失败，可点「复制手机链接」发到手机，用浏览器打开，或在配对页手动输入 Relay 地址与上方 <b>6 位配对码</b>。
+    </p>
+    <p id="msg" class="msg" role="status" aria-live="polite"></p>
+    <footer>令牌仅保存在手机本机 · 请通过 LAN / Tailscale / HTTPS 访问</footer>
+  </main>
+
+  <script src="qrcode.js"></script>
+  <script>
+  (function () {
+    "use strict";
+
+    var params = new URLSearchParams(location.search);
+    var rawU = (params.get("u") || "").trim();
+    var code = (params.get("code") || "").trim();
+    var validCode = /^\d{6}$/.test(code);
+
+    var codeEl = document.getElementById("code");
+    var urlEl = document.getElementById("url");
+    var qrEl = document.getElementById("qr");
+    var msgEl = document.getElementById("msg");
+    var copyBtn = document.getElementById("copy");
+    var openBtn = document.getElementById("open");
+
+    codeEl.textContent = validCode ? code : "------";
+
+    /* qr.html sits in the phone root; the pairing entry is the app root. */
+    function fallbackBase() {
+      try { return new URL(".", location.href).href; }
+      catch (e) { return location.origin + "/"; }
+    }
+
+    /* Accept either a bare relay URL or an already-built /?pair= link. */
+    function buildLink(raw) {
+      var u;
+      try { u = new URL(raw || fallbackBase(), location.href); }
+      catch (e) { u = new URL(fallbackBase()); }
+      if (validCode && !u.searchParams.has("pair")) {
+        u.searchParams.set("pair", code);
+      }
+      return u.href;
+    }
+
+    function flash(text, kind) {
+      msgEl.textContent = text || "";
+      msgEl.className = "msg" + (kind ? " " + kind : "");
+      if (text) {
+        setTimeout(function () {
+          if (msgEl.textContent === text) { msgEl.textContent = ""; msgEl.className = "msg"; }
+        }, 2800);
+      }
+    }
+
+    urlEl.value = buildLink(rawU);
+
+    if (typeof qrcode !== "function") {
+      qrEl.innerHTML = '<div class="qr-empty">二维码组件未加载（qrcode.js 缺失）</div>';
+      return;
+    }
+    /* Encode non-ASCII URLs as UTF-8 bytes when the helper is available. */
+    if (qrcode.stringToBytesFuncs && qrcode.stringToBytesFuncs["UTF-8"]) {
+      qrcode.stringToBytes = qrcode.stringToBytesFuncs["UTF-8"];
+    }
+
+    function renderQR() {
+      var text = urlEl.value.trim();
+      if (!text) { qrEl.innerHTML = '<div class="qr-empty">请输入手机链接</div>'; return; }
+      try {
+        var q = qrcode(0, "M");           // 0 = auto-select smallest fitting version
+        q.addData(text, "Byte");
+        q.make();
+        qrEl.innerHTML = q.createSvgTag({ cellSize: 8, margin: 16, scalable: true });
+        flash("");
+      } catch (e) {
+        qrEl.innerHTML = '<div class="qr-empty">二维码生成失败，请缩短链接后重试</div>';
+        flash("二维码生成失败，请缩短链接后重试", "err");
+      }
+    }
+
+    urlEl.addEventListener("input", renderQR);
+    urlEl.addEventListener("change", renderQR);
+
+    copyBtn.addEventListener("click", function () {
+      var v = urlEl.value.trim();
+      if (!v) return;
+      var done = function (ok) {
+        flash(ok ? "已复制手机链接" : "复制失败，请长按输入框手动复制", ok ? "ok" : "err");
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(v).then(function () { done(true); }, function () {
+          legacyCopy(v, done);
+        });
+      } else {
+        legacyCopy(v, done);
+      }
+    });
+
+    function legacyCopy(v, done) {
+      try {
+        urlEl.focus();
+        urlEl.select();
+        urlEl.setSelectionRange(0, v.length);
+        done(document.execCommand("copy"));
+      } catch (e) { done(false); }
+    }
+
+    openBtn.addEventListener("click", function () {
+      var v = urlEl.value.trim();
+      if (v) window.open(v, "_blank", "noopener,noreferrer");
+    });
+
+    renderQR();
+  })();
+  </script>
+</body>
+</html>
