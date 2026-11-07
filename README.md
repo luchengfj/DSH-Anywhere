@@ -2,6 +2,8 @@
 
 把**正在运行的 DeepSeek Harness（DSH）桌面会话**同步到手机，并让手机远程控制多台 Windows / SteamDeck 主机。
 
+📦 **GitHub 仓库**：https://github.com/luchengfj/DSH-Anywhere · **一键安装包（v1.0.0 Release）**：[DSH-Anywhere-Setup.exe](https://github.com/luchengfj/DSH-Anywhere/releases/download/v1.0.0/DSH-Anywhere-Setup.exe)（Windows）/ [DSH-Anywhere-Linux-x64.tar.gz](https://github.com/luchengfj/DSH-Anywhere/releases/download/v1.0.0/DSH-Anywhere-Linux-x64.tar.gz)（SteamDeck / Linux x64）。源码运行见下文「从源码运行」。
+
 - 零第三方 npm 依赖，只用 Node 内置模块（`http` / `fs` / `crypto` / `os` / `path` / `zlib` / `url` / `child_process`）。
 - 无构建步骤，不需要 `npm install`；**一键安装包已内置 Node 24 运行时**，开箱即用；仅「从源码运行 / 手动部署」才要求 **Node.js >= 22**（见 `package.json` 的 `engines`）。
 - 四部分组成：**relay**（一个 Node 进程，REST + SSE，并直接托管手机 PWA 静态文件）、**host adapter**（每台桌面一个，增量读取 DSH 会话日志）、**phone PWA**（纯静态，由 relay 托管，开一个 URL 即可）、**注入桥插件 `dsh-anywhere-inject`**（DSH profile bundle，随 host 自动部署、经 DSH HMR 热加载，把手机命令注入正在运行的 live agent）。
